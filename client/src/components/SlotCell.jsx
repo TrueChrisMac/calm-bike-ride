@@ -1,4 +1,4 @@
-export default function SlotCell({ rider, onSignUp }) {
+export default function SlotCell({ rider, onSignUp, onCancel }) {
   if (rider) {
     return (
       <div className="slot-cell">
@@ -6,6 +6,9 @@ export default function SlotCell({ rider, onSignUp }) {
           <span className="rider-dot" />
           <span className="rider-name" title={rider.name}>{rider.name}</span>
         </div>
+        <button className="change-btn" onClick={onCancel} title="Change or cancel this slot">
+          change
+        </button>
       </div>
     );
   }

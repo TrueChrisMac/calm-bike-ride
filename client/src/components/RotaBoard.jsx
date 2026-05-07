@@ -8,7 +8,7 @@ const PERIOD_LABELS = {
   Morning: 'Morning  06:00 – 10:00',
 };
 
-export default function RotaBoard({ slots, onSlotClick, onRefresh }) {
+export default function RotaBoard({ slots, onSlotClick, onCancelClick, onRefresh }) {
   const filledCount = slots.reduce((acc, s) => acc + s.bikes.filter(Boolean).length, 0);
   const totalCount = slots.length * 3;
 
@@ -64,6 +64,7 @@ export default function RotaBoard({ slots, onSlotClick, onRefresh }) {
                         <SlotCell
                           rider={rider}
                           onSignUp={() => onSlotClick(slot, bikeIndex)}
+                          onCancel={() => onCancelClick(slot, bikeIndex)}
                         />
                       </td>
                     ))}

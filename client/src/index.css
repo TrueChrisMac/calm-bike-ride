@@ -263,6 +263,10 @@ body {
   padding: 0.45rem 0.75rem;
   text-align: center;
   border-left: 1px solid #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
 }
 
 .signup-btn {
@@ -299,9 +303,26 @@ body {
   padding: 0.3rem 0.65rem;
   font-size: 0.75rem;
   color: #94a3b8;
-  max-width: 150px;
-  width: 100%;
+  max-width: 130px;
   justify-content: center;
+}
+
+.change-btn {
+  background: transparent;
+  border: none;
+  color: #475569;
+  font-size: 0.65rem;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0.2rem 0.3rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.change-btn:hover {
+  color: #f87171;
 }
 
 .rider-dot {

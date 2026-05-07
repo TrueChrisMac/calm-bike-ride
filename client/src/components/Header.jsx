@@ -42,7 +42,7 @@ export default function Header({ rota }) {
       </div>
 
       <p className="header-dates">
-        Tuesday 21 May 10:00 &rarr; Wednesday 22 May 10:00 &middot; True Technology Guildford
+        Thursday 21 May 10:00 &rarr; Friday 22 May 10:00 &middot; Hays House Guildford
       </p>
     </header>
   );

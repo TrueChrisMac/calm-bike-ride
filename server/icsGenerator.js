@@ -50,7 +50,7 @@ function generateIcs(slot, bikeIndex, name, email) {
     `DTSTART;TZID=Europe/London:${toIcsDate(slot.start)}`,
     `DTEND;TZID=Europe/London:${toIcsDate(slot.end)}`,
     `SUMMARY:Budapest Bike Ride for CALM - Slot ${slot.id} (Bike ${bikeNum})`,
-    'LOCATION:True Technology Guildford Office',
+    'LOCATION:Hays House Guildford',
     foldLine(`DESCRIPTION:${description}`),
     'STATUS:CONFIRMED',
     'END:VEVENT',

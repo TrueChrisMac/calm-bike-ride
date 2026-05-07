@@ -2,12 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header';
 import RotaBoard from './components/RotaBoard';
 import SignupModal from './components/SignupModal';
+import CancelModal from './components/CancelModal';
 
 export default function App() {
   const [rota, setRota] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selected, setSelected] = useState(null); // { slot, bikeIndex }
+  const [signupTarget, setSignupTarget] = useState(null);  // { slot, bikeIndex }
+  const [cancelTarget, setCancelTarget] = useState(null);  // { slot, bikeIndex }
 
   const fetchRota = useCallback(async () => {
     try {
@@ -30,7 +32,7 @@ export default function App() {
   }, [fetchRota]);
 
   async function handleSignup(name, email) {
-    const { slot, bikeIndex } = selected;
+    const { slot, bikeIndex } = signupTarget;
     const res = await fetch('/api/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -52,7 +54,24 @@ export default function App() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    setSelected(null);
+    setSignupTarget(null);
+    fetchRota();
+  }
+
+  async function handleCancel(email) {
+    const { slot, bikeIndex } = cancelTarget;
+    const res = await fetch('/api/cancel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slotId: slot.id, bikeIndex, email }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || 'Could not release slot');
+    }
+
+    setCancelTarget(null);
     fetchRota();
   }
 
@@ -64,16 +83,25 @@ export default function App() {
       {rota && (
         <RotaBoard
           slots={rota.slots}
-          onSlotClick={(slot, bikeIndex) => setSelected({ slot, bikeIndex })}
+          onSlotClick={(slot, bikeIndex) => setSignupTarget({ slot, bikeIndex })}
+          onCancelClick={(slot, bikeIndex) => setCancelTarget({ slot, bikeIndex })}
           onRefresh={fetchRota}
         />
       )}
-      {selected && (
+      {signupTarget && (
         <SignupModal
-          slot={selected.slot}
-          bikeIndex={selected.bikeIndex}
-          onClose={() => setSelected(null)}
+          slot={signupTarget.slot}
+          bikeIndex={signupTarget.bikeIndex}
+          onClose={() => setSignupTarget(null)}
           onSignup={handleSignup}
+        />
+      )}
+      {cancelTarget && (
+        <CancelModal
+          slot={cancelTarget.slot}
+          bikeIndex={cancelTarget.bikeIndex}
+          onClose={() => setCancelTarget(null)}
+          onCancel={handleCancel}
         />
       )}
     </div>

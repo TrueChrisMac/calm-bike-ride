@@ -80,4 +80,20 @@ function signUp(slotId, bikeIndex, name, email) {
   return { ok: true, slot };
 }
 
-module.exports = { getRota, signUp };
+function cancelBooking(slotId, bikeIndex, email) {
+  const rota = loadRota();
+  const slot = rota.slots.find(s => s.id === slotId);
+
+  if (!slot) return { ok: false, error: 'Slot not found' };
+  const rider = slot.bikes[bikeIndex];
+  if (!rider) return { ok: false, error: 'This slot is not booked' };
+  if (rider.email.toLowerCase() !== email.toLowerCase()) {
+    return { ok: false, error: 'Email does not match the booking — please use the email you signed up with' };
+  }
+
+  slot.bikes[bikeIndex] = null;
+  saveRota(rota);
+  return { ok: true };
+}
+
+module.exports = { getRota, signUp, cancelBooking };

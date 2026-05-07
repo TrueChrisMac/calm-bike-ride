@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { getRota, signUp } = require('./rota');
+const { getRota, signUp, cancelBooking } = require('./rota');
 const { generateIcs } = require('./icsGenerator');
 
 const app = express();
@@ -37,6 +37,21 @@ app.post('/api/signup', (req, res) => {
     `attachment; filename="calm-bike-ride-slot-${slotId}-bike-${Number(bikeIndex) + 1}.ics"`
   );
   res.send(ics);
+});
+
+app.post('/api/cancel', (req, res) => {
+  const { slotId, bikeIndex, email } = req.body;
+
+  if (!email || slotId == null || bikeIndex == null) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  const result = cancelBooking(Number(slotId), Number(bikeIndex), email.trim().toLowerCase());
+  if (!result.ok) {
+    return res.status(409).json({ error: result.error });
+  }
+
+  res.json({ ok: true });
 });
 
 // Serve React build in production
